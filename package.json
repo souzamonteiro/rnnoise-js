@@ -1,0 +1,28 @@
+{
+  "name": "rnnoise-js",
+  "version": "1.0.0",
+  "description": "RNNoise noise suppression library JavaScript module.",
+  "main": "index.js",
+  "scripts": {
+    "build": "sh ./build.sh",
+    "test": "sh ./test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souzamonteiro/rnnoise-js.git"
+  },
+  "keywords": [
+    "c",
+    "javascript",
+    "html5",
+    "css",
+    "maiascript",
+    "noise cancelling"
+  ],
+  "author": "Roberto Luiz Souza Monteiro",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/souzamonteiro/rnnoise-js/issues"
+  },
+  "homepage": "https://github.com/souzamonteiro/rnnoise-js#readme"
+}
