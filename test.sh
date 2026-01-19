@@ -1,10 +1,9 @@
 #!/bin/sh
 
-ffmpeg -y -i babble_15dB.opus -acodec pcm_s16le -f s16le -ac 1 -ar 48k babble_15dB.raw
+FFMPEG_PATH=~/Projects/ffmpeg-wasm-browser/test/src/FFmpeg-n5.1.4/ffmpeg
 
-rm -f babble_15dB_denoised.raw
-rm -f babble_15dB_denoised.wav
+#$FFMPEG_PATH -i audio/babble_15dB.opus -c pcm_s16le -f s16le -ar 48000 -ac 1 babble_15dB.pcm -y
 
-node ./bin/maiascript.js maia/rnnoise.maia babble_15dB.raw babble_15dB_denoised.raw
+node build/rnnoise_demo.js audio/babble_10dB.pcm audio/babble_10dB_denoised.pcm
 
-ffmpeg -f s16le -ar 48k -ac 1 -i babble_15dB_denoised.raw babble_15dB_denoised.wav
+#$FFMPEG_PATH -f s16le -ar 48k -ac 1 -i babble_15dB_denoised.pcm babble_15dB_denoised.wav
