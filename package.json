@@ -8,9 +8,10 @@
   },
   "scripts": {
     "build": "./compile.sh",
-    "test": "node test.mjs"
+    "test": "./test.sh"
   },
   "dependencies": {
+    "wav": "^1.0.2",
     "wavefile": "^11.0.0"
   },
   "engines": {

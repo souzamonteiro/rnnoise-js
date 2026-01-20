@@ -1,33 +1,59 @@
-#include <emscripten.h>
-#include <stdio.h>
-#include <string.h>
-#include "rnnoise/include/rnnoise.h"
+// rnnoise_wrapper.c
+#include <stdlib.h>
+#include "rnnoise.h"
 
-#define FRAME_SIZE 480
+#define FRAME_SIZE 480  // Defina o tamanho do frame conforme necessário
 
-EMSCRIPTEN_KEEPALIVE
-DenoiseState* rnnoise_create_wasm() {
-    return rnnoise_create(NULL);
+// Estrutura idêntica à do seu código C
+typedef struct {
+    DenoiseState* state;
+} RNNoiseWrapper;
+
+// Criar instância - IDÊNTICO ao seu código
+RNNoiseWrapper* rnnoise_create_wasm() {
+    RNNoiseWrapper* wrapper = (RNNoiseWrapper*)malloc(sizeof(RNNoiseWrapper));
+    if (!wrapper) return NULL;
+    
+    // ⚠️ CRÍTICO: Usar NULL como parâmetro, igual ao seu código
+    wrapper->state = rnnoise_create(NULL);
+    
+    if (!wrapper->state) {
+        free(wrapper);
+        return NULL;
+    }
+    
+    return wrapper;
 }
 
-EMSCRIPTEN_KEEPALIVE
-void rnnoise_destroy_wasm(DenoiseState* state) {
-    rnnoise_destroy(state);
+// Destruir instância
+void rnnoise_destroy_wasm(RNNoiseWrapper* wrapper) {
+    if (wrapper) {
+        if (wrapper->state) {
+            rnnoise_destroy(wrapper->state);
+        }
+        free(wrapper);
+    }
 }
 
-EMSCRIPTEN_KEEPALIVE
-float rnnoise_process_frame_wasm(DenoiseState* state, float* in, float* out) {
-    return rnnoise_process_frame(state, out, in);
+// Processar frame - IDÊNTICO ao seu código
+float rnnoise_process_frame_wasm(RNNoiseWrapper* wrapper, float* output, const float* input) {
+    if (!wrapper || !wrapper->state || !output || !input) {
+        return 0.0f;
+    }
+    
+    // ⚠️ CRÍTICO: Chamada idêntica ao seu código funcionando
+    return rnnoise_process_frame(wrapper->state, output, input);
 }
 
-EMSCRIPTEN_KEEPALIVE
+// Obter tamanho do frame
 int get_frame_size() {
     return FRAME_SIZE;
 }
 
-EMSCRIPTEN_KEEPALIVE
-void rnnoise_process_buffer_wasm(DenoiseState* state, float* input, float* output, int num_frames) {
-    for (int i = 0; i < num_frames; i++) {
-        rnnoise_process_frame(state, output + i * FRAME_SIZE, input + i * FRAME_SIZE);
+// Função de buffer alternativa
+float rnnoise_process_buffer_wasm(RNNoiseWrapper* wrapper, float* output, const float* input, int length) {
+    if (!wrapper || !wrapper->state || length != FRAME_SIZE) {
+        return 0.0f;
     }
+    return rnnoise_process_frame(wrapper->state, output, input);
 }
