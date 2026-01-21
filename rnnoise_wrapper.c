@@ -2,19 +2,18 @@
 #include <stdlib.h>
 #include "rnnoise.h"
 
-#define FRAME_SIZE 480  // Defina o tamanho do frame conforme necessário
+#define FRAME_SIZE 480  // Set the frame size as needed
 
-// Estrutura idêntica à do seu código C
 typedef struct {
     DenoiseState* state;
 } RNNoiseWrapper;
 
-// Criar instância - IDÊNTICO ao seu código
+// Create instance
 RNNoiseWrapper* rnnoise_create_wasm() {
     RNNoiseWrapper* wrapper = (RNNoiseWrapper*)malloc(sizeof(RNNoiseWrapper));
     if (!wrapper) return NULL;
     
-    // ⚠️ CRÍTICO: Usar NULL como parâmetro, igual ao seu código
+    // ⚠️ CRITICAL: Use NULL as parameter
     wrapper->state = rnnoise_create(NULL);
     
     if (!wrapper->state) {
@@ -25,7 +24,7 @@ RNNoiseWrapper* rnnoise_create_wasm() {
     return wrapper;
 }
 
-// Destruir instância
+// Destroy instance
 void rnnoise_destroy_wasm(RNNoiseWrapper* wrapper) {
     if (wrapper) {
         if (wrapper->state) {
@@ -35,22 +34,21 @@ void rnnoise_destroy_wasm(RNNoiseWrapper* wrapper) {
     }
 }
 
-// Processar frame - IDÊNTICO ao seu código
+// Process frame
 float rnnoise_process_frame_wasm(RNNoiseWrapper* wrapper, float* output, const float* input) {
     if (!wrapper || !wrapper->state || !output || !input) {
         return 0.0f;
     }
     
-    // ⚠️ CRÍTICO: Chamada idêntica ao seu código funcionando
     return rnnoise_process_frame(wrapper->state, output, input);
 }
 
-// Obter tamanho do frame
+// Get frame size
 int get_frame_size() {
     return FRAME_SIZE;
 }
 
-// Função de buffer alternativa
+// Alternative buffer function
 float rnnoise_process_buffer_wasm(RNNoiseWrapper* wrapper, float* output, const float* input, int length) {
     if (!wrapper || !wrapper->state || length != FRAME_SIZE) {
         return 0.0f;

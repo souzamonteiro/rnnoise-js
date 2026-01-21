@@ -28,18 +28,18 @@ class RNNoiseNode {
         const outputPtr = this.module._malloc(inputFrame.length * 4);
 
         try {
-            // Copiar input para WASM
+            // Copy input to WASM
             const inputBytes = new Uint8Array(inputFrame.buffer);
             this.module.HEAPU8.set(inputBytes, inputPtr);
             
-            // Processar
+            // Process frame
             const vadProbability = this.module._rnnoise_process_frame_wasm(
                 this.rnnoise, 
                 outputPtr, 
                 inputPtr
             );
             
-            // Copiar output
+            // Copy output
             const outputFrame = new Float32Array(this.frameSize);
             const outputStart = outputPtr / 4;
             for (let i = 0; i < this.frameSize; i++) {
@@ -57,7 +57,6 @@ class RNNoiseNode {
         }
     }
 
-    // Novo método: resetar o estado do RNNoise
     reset() {
         if (this.initialized) {
             this.module._rnnoise_destroy_wasm(this.rnnoise);
