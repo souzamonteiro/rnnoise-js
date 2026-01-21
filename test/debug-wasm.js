@@ -1,61 +1,60 @@
 // debug-wasm.js
-import createRNNoiseModule from './rnnoise.js';
+import createRNNoiseModule from './/rnnoise.js';
 
 async function debugWASM() {
-    console.log('🔍 Debug avançado do módulo WASM...');
-    
+    console.log('🔍 Advanced debugging of the WASM module...');
     try {
         const module = await createRNNoiseModule();
-        console.log('✅ Módulo carregado');
-        
-        // Testar criação de instância
-        console.log('\n🧪 Testando criação de instância...');
+        console.log('✅ Module loaded');
+
+        // Test instance creation
+        console.log('\n🧪 Testing instance creation...');
         const instance = module._rnnoise_create_wasm();
-        console.log('   Instância:', instance);
-        
-        // Testar frame size
+        console.log(' Instance:', instance);
+
+        // Test frame size
         const frameSize = module._get_frame_size();
-        console.log('   Frame size:', frameSize);
-        
-        // Criar um frame de teste mais realista
+        console.log(' Frame size:', frameSize);
+
+        // Create a more realistic test frame
         const testFrame = new Float32Array(frameSize);
         for (let i = 0; i < frameSize; i++) {
-            // Sinal mais forte que simule voz
-            testFrame[i] = Math.sin(i * 0.5) * 0.1; // Onda senoidal forte
+            // Stronger signal that simulates voice
+            testFrame[i] = Math.sin(i * 0.5) * 0.1; // Strong sine wave
         }
-        
-        console.log('\n🔧 Testando alocação de memória...');
+        console.log('\n🔧 Testing memory allocation...');
         const inputPtr = module._malloc(testFrame.length * 4);
         const outputPtr = module._malloc(testFrame.length * 4);
-        console.log('   Ponteiros:', { inputPtr, outputPtr });
-        
-        // Testar a função de processamento diretamente
-        console.log('\n🎯 Testando _rnnoise_process_frame_wasm diretamente...');
-        
-        // Primeiro, precisamos descobrir a assinatura correta da função
-        // Vamos testar diferentes abordagens
-        
-        // Tentativa 1: com ponteiros
-        console.log('   Tentativa 1: com ponteiros...');
+        console.log(' Pointers:', {
+            inputPtr,
+            outputPtr
+        });
+
+        // Test the processing function directly
+        console.log('\n🎯 Testing _rnnoise_process_frame_wasm directly...');
+
+        // First, we need to find the correct function signature
+        // Let's test different approaches
+        //Attempt 1: with pointers
+        console.log('Attempt 1: with pointers...');
         try {
-            // Preencher a memória com o frame de teste
-            // Precisamos acessar a memória do WASM
+            // Fill the memory with the test frame
+            //We need to access the WASM memory
             if (module.HEAPU8) {
-                console.log('   HEAPU8 disponível');
+                console.log(' HEAPU8 available');
                 const inputBytes = new Uint8Array(testFrame.buffer);
                 module.HEAPU8.set(inputBytes, inputPtr);
-                
                 const vad = module._rnnoise_process_frame_wasm(instance, outputPtr, inputPtr);
-                console.log('   VAD (ponteiros):', vad);
+                console.log(' VAD (pointers):', vad);
             } else {
-                console.log('   ❌ HEAPU8 não disponível');
+                console.log(' ❌ HEAPU8 not available');
             }
         } catch (error) {
-            console.log('   ❌ Erro com ponteiros:', error.message);
+            console.log(' ❌ Error with pointers:', error.message);
         }
-        
-        // Tentativa 2: com ccall
-        console.log('\n   Tentativa 2: com ccall...');
+
+        // Attempt 2: with ccall
+        console.log('\n Attempt 2: with ccall...');
         try {
             const vad = module.ccall(
                 'rnnoise_process_frame_wasm',
@@ -63,51 +62,48 @@ async function debugWASM() {
                 ['number', 'number', 'number'],
                 [instance, outputPtr, inputPtr]
             );
-            console.log('   VAD (ccall):', vad);
+            console.log(' VAD (ccall):', vad);
         } catch (error) {
-            console.log('   ❌ Erro com ccall:', error.message);
+            console.log(' ❌ Error with ccall:', error.message);
         }
-        
-        // Tentativa 3: descobrir a assinatura correta
-        console.log('\n📋 Examinando funções disponíveis...');
-        const functions = Object.keys(module).filter(key => 
-            typeof module[key] === 'function' && 
+
+        // Attempt 3: discover the correct signature
+        console.log('\n📋 Examining available functions...');
+        const functions = Object.keys(module).filter(key =>
+            typeof module[key] === 'function' &&
             key.startsWith('_rnnoise')
         );
-        
-        console.log('   Funções RNNoise:');
+        console.log(' RNNoise Functions:');
         functions.forEach(fn => {
-            console.log('   -', fn);
+            console.log(' -', fn);
         });
-        
-        // Testar função de buffer se disponível
+
+        // Test buffer function if available
         if (module._rnnoise_process_buffer_wasm) {
-            console.log('\n🔊 Testando _rnnoise_process_buffer_wasm...');
+            console.log('\n🔊 Testing _rnnoise_process_buffer_wasm...');
             try {
-                // Converter para array JavaScript
+                // Convert to JavaScript array
                 const inputArray = Array.from(testFrame);
                 const outputArray = new Array(testFrame.length).fill(0);
-                
                 const vad = module._rnnoise_process_buffer_wasm(
-                    instance, 
-                    outputArray, 
-                    inputArray, 
+                    instance,
+                    outputArray,
+                    inputArray,
                     testFrame.length
                 );
-                console.log('   VAD (buffer):', vad);
-                console.log('   Output array samples:', outputArray.slice(0, 5));
+                console.log(' VAD (buffer):', vad);
+                console.log(' Output array samples:', outputArray.slice(0, 5));
             } catch (error) {
-                console.log('   ❌ Erro com buffer:', error.message);
+                console.log(' ❌ Error with buffer:', error.message);
             }
         }
-        
-        // Liberar memória
+
+        // Free up memory 
         module._free(inputPtr);
         module._free(outputPtr);
         module._rnnoise_destroy_wasm(instance);
-        
     } catch (error) {
-        console.error('❌ Erro no debug:', error);
+        console.error('❌ Debug error:', error);
     }
 }
 

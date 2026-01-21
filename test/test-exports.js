@@ -2,50 +2,51 @@
 import createRNNoiseModule from './rnnoise.js';
 
 async function testExports() {
-    console.log('🔍 Verificando exportações do módulo...');
-    
+    console.log('🔍 Checking module exports...');
+
     try {
         const module = await createRNNoiseModule();
-        console.log('✅ Módulo carregado');
-        
-        // Listar todas as funções exportadas
-        console.log('\n📋 Todas as funções exportadas:');
+        console.log('✅ Module loaded');
+
+        // List all exported functions
+        console.log('\n📋 All exported functions:');
         Object.keys(module)
             .filter(key => typeof module[key] === 'function')
             .sort()
-            .forEach(key => console.log(`   - ${key}`));
-        
-        // Verificar se as funções do RNNoise original estão disponíveis
-        console.log('\n🔍 Funções RNNoise específicas:');
-        const rnnoiseFuncs = Object.keys(module).filter(key => 
-            typeof module[key] === 'function' && 
+            .forEach(key => console.log(` - ${key}`));
+
+        // Check if the original RNNoise functions are available
+        console.log('\n🔍 Specific RNNoise functions:');
+
+        const rnnoiseFuncs = Object.keys(module).filter(key =>
+            typeof module[key] === 'function' &&
             key.includes('rnnoise')
         );
-        
-        rnnoiseFuncs.forEach(fn => console.log(`   - ${fn}`));
-        
-        // Testar criação direta (se disponível)
+
+        rnnoiseFuncs.forEach(fn => console.log(` - ${fn}`));
+
+        // Test direct creation (if available)
         if (module._rnnoise_create) {
-            console.log('\n🧪 Testando _rnnoise_create direto...');
+            console.log('\n🧪 Testing _rnnoise_create directly...');
             const directInstance = module._rnnoise_create();
-            console.log('   Instância direta:', directInstance);
+            console.log(' Direct instance:', directInstance);
         }
-        
-        // Testar wrapper
-        console.log('\n🧪 Testando wrapper...');
+
+        // Test wrapper
+        console.log('\n🧪 Testing wrapper...');
+
         const wrapperInstance = module._rnnoise_create_wasm();
-        console.log('   Wrapper instance:', wrapperInstance);
-        
+        console.log(' Wrapper instance:', wrapperInstance);
+
         const frameSize = module._get_frame_size();
-        console.log('   Frame size:', frameSize);
-        
-        // Verificar se há diferença entre as funções
+        console.log(' Frame size:', frameSize);
+
+        // Check if there is a difference between the functions
         if (module._rnnoise_create && module._rnnoise_create_wasm) {
-            console.log('   Funções diferentes?', module._rnnoise_create !== module._rnnoise_create_wasm);
+            console.log(' Different functions?', module._rnnoise_create !== module._rnnoise_create_wasm);
         }
-        
     } catch (error) {
-        console.error('❌ Erro:', error);
+        console.error('❌ Error:', error);
     }
 }
 

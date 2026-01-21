@@ -2,14 +2,14 @@
 import createRNNoiseModule from './rnnoise.js';
 
 async function debugModule() {
-    console.log('🔍 Debugando estrutura do módulo RNNoise...');
-    
+    console.log('🔍 Debugging RNNoise module structure...');
+
     try {
-        console.log('📦 Carregando módulo...');
+        console.log('📦 Loading module...');
         const module = await createRNNoiseModule();
-        console.log('✅ Módulo carregado:', typeof module);
-        
-        console.log('\n📋 Propriedades do módulo:');
+        console.log('✅ Module loaded:', typeof module);
+
+        console.log('\n📋 Module properties:');
         Object.keys(module).forEach(key => {
             const value = module[key];
             if (typeof value === 'function') {
@@ -18,8 +18,8 @@ async function debugModule() {
                 console.log(`- ${key}:`, typeof value);
             }
         });
-        
-        console.log('\n🔍 Propriedades importantes:');
+
+        console.log('\n🔍 Important properties:');
         console.log('- _malloc:', typeof module._malloc);
         console.log('- _free:', typeof module._free);
         console.log('- _rnnoise_create_wasm:', typeof module._rnnoise_create_wasm);
@@ -27,27 +27,27 @@ async function debugModule() {
         console.log('- HEAPU8:', module.HEAPU8 ? '✅' : '❌');
         console.log('- HEAPF32:', module.HEAPF32 ? '✅' : '❌');
         console.log('- memory:', module.memory ? '✅' : '❌');
-        
+
         if (module.HEAPU8) {
             console.log('- HEAPU8 length:', module.HEAPU8.length);
         }
         if (module.HEAPF32) {
             console.log('- HEAPF32 length:', module.HEAPF32.length);
         }
-        
-        console.log('\n🧪 Testando funções...');
+
+        console.log('\n🧪 Testing functions...');
         if (typeof module._rnnoise_create_wasm === 'function') {
             const instance = module._rnnoise_create_wasm();
-            console.log('- Instância criada:', instance);
+            console.log('- Instance created:', instance);
         }
-        
+
         if (typeof module._get_frame_size === 'function') {
             const frameSize = module._get_frame_size();
             console.log('- Frame size:', frameSize);
         }
-        
+
     } catch (error) {
-        console.error('❌ Erro no debug:', error);
+        console.error('❌ Debug error:', error);
         console.error('Stack:', error.stack);
     }
 }
