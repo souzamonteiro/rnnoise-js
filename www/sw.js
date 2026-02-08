@@ -20,7 +20,7 @@ const urlsToCache = [
   './icons/favicon-32.png',
   './icons/icon.svg',
   './rnnoise-wasm.js',
-  '.rnnoise-wasm.wasm'
+  './rnnoise-wasm.wasm'
 ];
 
 // Installation - cache all resources
