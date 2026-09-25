@@ -1,0 +1,186 @@
+/* Maia media apps: shared visual tokens from Maia Reel.
+ * Keep layout, media previews, canvas output and visibility under each app's control.
+ * Canonical source: maia-edge-apps-deployment/themes/maia-reel.css.
+ */
+:root {
+  --reel-bg: #10131c;
+  --reel-panel: #171c28;
+  --reel-raised: #202636;
+  --reel-input: #111723;
+  --reel-border: #394052;
+  --reel-text: #e8ebf4;
+  --reel-muted: #a3adc3;
+  --reel-accent: #8470ed;
+  --reel-hover: #9883ff;
+  --primary-color: #8470ed;
+  --primary-dark: #9883ff;
+  --secondary-color: #364056;
+  --accent-color: #ac99ff;
+  --background-color: #10131c;
+  --text-color: #e8ebf4;
+  --border-color: #394052;
+  --light-gray: #202636;
+  --dark-gray: #a3adc3;
+  --tab-inactive: #262d3d;
+  --primary: #8470ed;
+  --secondary: #514875;
+  --dark: #e8ebf4;
+  --light: #202636;
+  --gray: #a3adc3;
+  --danger-color: #8c354b;
+  --success-color: #24664d;
+  --border-radius: 8px;
+  --shadow: 0 8px 24px #0003;
+  color-scheme: dark;
+}
+body.maia-reel-theme {
+  background: var(--reel-bg);
+  color: var(--reel-text);
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.6;
+  padding: 24px;
+  align-items: flex-start;
+}
+/* Do not override icon fonts or user-selected text in a video/teleprompter. */
+body.maia-reel-theme :where(h1, h2, h3, p, label, button, input, select, textarea, a, span):not(:where(.text-overlay *, .text-overlay, .teleprompter-text *, .teleprompter-text)) {
+  font-family: inherit;
+}
+body.maia-reel-theme .container {
+  border-radius: 8px;
+  background: var(--reel-panel);
+  box-shadow: 0 12px 35px #0004;
+  border: 1px solid #303647;
+}
+body.maia-reel-theme :is(header, .header) {
+  background: var(--reel-panel);
+  border-bottom: 1px solid #303647;
+  border-radius: 0;
+  color: var(--reel-text);
+  box-shadow: none;
+}
+body.maia-reel-theme :is(h1, h2, h3, h4):not(:where(.teleprompter-text *, .text-overlay *)) {
+  color: #e6e1ff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  font-weight: 600;
+}
+body.maia-reel-theme h1:not(.teleprompter-text *) {
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  line-height: 1.35;
+}
+body.maia-reel-theme :is(.subtitle, .description, .header p, .drop-zone p, .file-info, .audio-info, .empty-state, .script-preview, .text-item-time, .slider-value, footer) {
+  color: var(--reel-muted);
+}
+body.maia-reel-theme :is(label, .toggle-label, .panel-title, .time-display, .info-card p) {
+  color: var(--reel-text);
+}
+body.maia-reel-theme :is(.settings-container, .file-section, .comparison-item, .instructions, .scripts-sidebar, .scripts-main, .teleprompter-controls, .settings-grid, .edit-area, .tab-content, .tabs, .modal-content, .controls, .results, .option-group, .info-card, .editor-wrapper, .controls-section, .panel, .video-controls, .timeline-section, .timeline-container, .transitions-container, .progress-section, .progress-content, .video-section, .editor-panel, .preview-section, .text-item) {
+  background: var(--reel-raised);
+  color: var(--reel-text);
+  border-color: var(--reel-border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+body.maia-reel-theme :is(.file-info, .time-display, .transcript-container, .script-list, .log-output) {
+  background: var(--reel-input);
+  color: var(--reel-muted);
+  border-color: var(--reel-border);
+}
+body.maia-reel-theme .log-output { font-family: ui-monospace, monospace; }
+body.maia-reel-theme :is(.file-input-area, .upload-section, .upload-area, .drop-zone) {
+  background: var(--reel-input);
+  border: 1px dashed #8c7cbd;
+  border-radius: 8px;
+  color: var(--reel-text);
+}
+body.maia-reel-theme :is(.file-input-area, .upload-section, .upload-area, .drop-zone):is(:hover, .dragover, .drag-over, .highlight) {
+  background: #26213c;
+  border-color: #ac99ff;
+  box-shadow: none;
+}
+body.maia-reel-theme :is(.upload-icon, .drop-zone i, .logo i, .panel-title i) { color: #ac99ff; }
+body.maia-reel-theme :is(button, .btn, .button, .download-btn, .file-upload label) {
+  background: #262d3d;
+  color: #eef1fa;
+  border: 1px solid var(--reel-border);
+  border-radius: 7px;
+  font-weight: 500;
+  box-shadow: none;
+  transition: background-color 120ms, border-color 120ms;
+}
+body.maia-reel-theme :is(button, .btn, .button, .download-btn, .file-upload label):hover {
+  background: #364056;
+  color: #eef1fa;
+  box-shadow: none;
+  transform: none;
+}
+body.maia-reel-theme :is(.btn-primary, .button:not(.button-secondary), .upload-btn, #record, #convertBtn, #extractBtn, #processBtn, #exportBtn, .controls button, button.success, .btn-success, .download-btn) {
+  background: var(--reel-accent);
+  border-color: #9987fc;
+  color: #fff;
+}
+body.maia-reel-theme :is(.btn-primary, .button:not(.button-secondary), .upload-btn, #record, #convertBtn, #extractBtn, #processBtn, #exportBtn, .controls button, button.success, .btn-success, .download-btn):hover {
+  background: var(--reel-hover);
+}
+body.maia-reel-theme :is(.btn-danger, button.danger, .delete-btn, .new-project-btn, #stop) {
+  background: #512b38;
+  border-color: #955063;
+  color: #ffdce3;
+}
+body.maia-reel-theme :is(.btn-danger, button.danger, .delete-btn, .new-project-btn, #stop):hover { background: #713447; }
+body.maia-reel-theme :is(button, .btn, .button):disabled {
+  opacity: .4;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+body.maia-reel-theme :is(select, textarea, input[type="text"], input[type="number"], input[type="search"], input[type="url"]) {
+  background: var(--reel-input);
+  color: var(--reel-text);
+  border: 1px solid #3c455c;
+  border-radius: 5px;
+  padding: 8px;
+  max-width: 100%;
+}
+body.maia-reel-theme option { background: var(--reel-input); color: var(--reel-text); }
+body.maia-reel-theme ::placeholder { color: #a3adc3; opacity: 1; }
+body.maia-reel-theme :is(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #a49cff;
+  outline-offset: 3px;
+}
+body.maia-reel-theme :is(input[type="range"], input[type="checkbox"]) { accent-color: #ac99ff; }
+body.maia-reel-theme input[type="range"]::-webkit-slider-thumb { background: #ac99ff; border-color: #ac99ff; }
+body.maia-reel-theme .tab { background: #262d3d; color: var(--reel-muted); }
+body.maia-reel-theme :is(.tab.active, .script-item.selected) { background: #514875; color: #fff; border-color: #ac99ff; }
+body.maia-reel-theme :is(.tab:hover, .script-item:hover) { background: #364056; }
+body.maia-reel-theme :is(.status-bar, #status:not(.recording, .paused, .saved)) { background: #232b3d; color: #e8ebf4; }
+body.maia-reel-theme :is(.recording, .status.error, .error-message) { background: #512b38; color: #ffdce3; border-color: #955063; }
+body.maia-reel-theme :is(.paused, .camera-permission, .status.processing) { background: #423922; color: #ffe6a4; border-color: #8c7952; }
+body.maia-reel-theme :is(.saved, .status.success) { background: #244f43; color: #b6f2d9; border-color: #42846c; }
+body.maia-reel-theme .info-message { background: #232b3d; color: #c8d7ff; border-color: #465777; }
+body.maia-reel-theme :is(.progress-bar, #timeline) { background: #101622; }
+body.maia-reel-theme :is(.progress-fill, .progress, #playbackProgress) { background: #8470ed; }
+body.maia-reel-theme .clip { background: #514875; border-color: #8c7cbd; }
+body.maia-reel-theme .clip:is(:hover, .active) { border-color: #ddd4ff; box-shadow: 0 0 0 2px #ddd4ff; }
+body.maia-reel-theme footer { font-size: 12px; }
+body.maia-reel-theme footer a { color: #c6b8ff; }
+@media (max-width: 700px) {
+  body.maia-reel-theme { padding: 12px; }
+  body.maia-reel-theme .container { max-width: 100%; min-width: 0; }
+  body.maia-reel-theme :is(.main-content, .header, header) { padding: 16px; }
+  body.maia-reel-theme .drop-zones { grid-template-columns: minmax(0, 1fr); }
+  body.maia-reel-theme .button-container { flex-wrap: wrap; }
+  body.maia-reel-theme .button-container button { flex-basis: 40%; }
+  body.maia-reel-theme :is(.file-info, .text-item, .status, .log-output) { overflow-wrap: anywhere; }
+}
+/* Reading surface stays legible while retaining the user's chosen font and size. */
+body.maia-reel-theme .teleprompter-display {
+  background: #090b10;
+  color: #e8ebf4;
+}
+body.maia-reel-theme :is(#pause, #save) {
+  background: #262d3d;
+  color: #eef1fa;
+  border-color: #394052;
+}
+body.maia-reel-theme :is(#pause, #save):hover { background: #364056; }

@@ -3,8 +3,8 @@
   "short_name": "RNNoiseDenoiser",
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#3498db",
-  "background_color": "#f5f7fa",
+  "theme_color": "#10131c",
+  "background_color": "#10131c",
   "description": "A web-based audio denoiser using RNNoise and WebAssembly.",
   "icons": [
     {
